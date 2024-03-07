@@ -95,14 +95,18 @@ const App = () => {
   }, []);
 
   const loginWithFacebook = () => {
-    window.FB.login(function (response) {
-      // handle the response
-      if (response.authResponse) {
-        console.log("User logged in successfully");
-      } else {
-        console.log("User cancelled login or did not fully authorize.");
-      }
-    });
+    window.FB.login(
+      function (response) {
+        // handle the response
+        if (response.authResponse) {
+          console.log("User logged in successfully");
+          // Fetch user data or perform other actions after successful login
+        } else {
+          console.log("User cancelled login or did not fully authorize.");
+        }
+      },
+      { scope: "email" }
+    ); // Specify additional permissions if needed
   };
 
   return (
