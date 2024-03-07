@@ -75,7 +75,7 @@ const App = () => {
         appId: "348559591449033",
         cookie: true,
         xfbml: true,
-        version: "v12.0", // use the latest version available
+        version: "v19.0", // use the latest version available
       });
 
       // Trigger a custom event after SDK initialization
