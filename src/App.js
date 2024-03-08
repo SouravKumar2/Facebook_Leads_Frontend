@@ -63,35 +63,31 @@ const App = () => {
     };
 
     fetchLeadData();
-  }, []); // Empty dependency array means this effect runs only once after the initial render
+  }, []);
 
   useEffect(() => {
-    const initializeFacebookSDK = () => {
-      window.fbAsyncInit = function () {
-        window.FB.init({
-          appId: "1042559036824480", // Replace with your actual App ID
-          cookie: true,
-          xfbml: true,
-          version: "v19.0", // use the latest version available
-        });
+    window.fbAsyncInit = function () {
+      window.FB.init({
+        appId: "1042559036824480", // Replace with your actual App ID
+        cookie: true,
+        xfbml: true,
+        version: "v19.0", // use the latest version available
+      });
 
-        // Trigger a custom event after SDK initialization
-        window.dispatchEvent(new Event("fb-sdk-initialized"));
-      };
-
-      // Load the SDK asynchronously
-      (function (d, s, id) {
-        var js,
-          fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "https://connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-      })(document, "script", "facebook-jssdk");
+      // Trigger a custom event after SDK initialization
+      window.dispatchEvent(new Event("fb-sdk-initialized"));
     };
 
-    initializeFacebookSDK();
+    // Load the SDK asynchronously
+    (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    })(document, "script", "facebook-jssdk");
   }, []);
 
   const loginWithFacebook = () => {
