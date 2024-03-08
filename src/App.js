@@ -63,57 +63,46 @@ const App = () => {
     };
 
     fetchLeadData();
-  }, []);
+  }, []); // Empty dependency array means this effect runs only once after the initial render
 
   useEffect(() => {
-    window.fbAsyncInit = function () {
-      window.FB.init({
-        appId: "1042559036824480", // Replace with your actual App ID
-        cookie: true,
-        xfbml: true,
-        version: "v19.0", // use the latest version available
-      });
+    const initializeFacebookSDK = () => {
+      window.fbAsyncInit = function () {
+        window.FB.init({
+          appId: "1042559036824480", // Replace with your actual App ID
+          cookie: true,
+          xfbml: true,
+          version: "v19.0", // use the latest version available
+        });
 
-      // Trigger a custom event after SDK initialization
-      window.dispatchEvent(new Event("fb-sdk-initialized"));
+        // Trigger a custom event after SDK initialization
+        window.dispatchEvent(new Event("fb-sdk-initialized"));
+      };
+
+      // Load the SDK asynchronously
+      (function (d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "facebook-jssdk");
     };
 
-    // Load the SDK asynchronously
-    (function (d, s, id) {
-      var js,
-        fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s);
-      js.id = id;
-      js.src = "https://connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    })(document, "script", "facebook-jssdk");
+    initializeFacebookSDK();
   }, []);
 
   const loginWithFacebook = () => {
     if (window.FB) {
       window.FB.login(
-        async function (response) {
+        function (response) {
           // handle the response
           if (response.authResponse) {
             console.log("User logged in successfully");
-            try {
-              // Fetch lead data using the access token
-              const accessToken = response.authResponse.accessToken;
-              const leadResponse = await fetch(
-                `https://facebook-leads-backend.onrender.com/getLeadData?accessToken=${accessToken}`
-              );
-              if (!leadResponse.ok) {
-                throw new Error(
-                  `Failed to fetch lead data. Status: ${leadResponse.status}`
-                );
-              }
-              const leadData = await leadResponse.json();
-              console.log("Lead data:", leadData);
-              setLeadData(leadData);
-            } catch (error) {
-              console.error("Error fetching lead data:", error.message);
-            }
+            // You can fetch lead data after successful login using the access token
+            // in response.authResponse.accessToken
           } else {
             console.log("User cancelled login or did not fully authorize.");
           }
