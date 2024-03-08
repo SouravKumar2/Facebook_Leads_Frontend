@@ -46,21 +46,56 @@ const App = () => {
   const [leadData, setLeadData] = useState(null);
 
   useEffect(() => {
-    // Initialize Facebook SDK asynchronously
+    const fetchLeadData = async () => {
+      try {
+        const response = await fetch(
+          "https://facebook-leads-backend.onrender.com/getLeadData"
+        );
+        if (!response.ok) {
+          throw new Error(`Failed to fetch data. Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("Received data:", data);
+        setLeadData(data);
+      } catch (error) {
+        console.error("Error fetching lead data:", error.message);
+      }
+    };
+
+    fetchLeadData();
+  }, []);
+
+  const loginWithFacebook = () => {
+    window.FB.login(
+      function (response) {
+        if (response.authResponse) {
+          console.log("User logged in successfully");
+          // Fetch lead data using response.authResponse.accessToken
+          // Make sure to handle errors and fetch data accordingly
+        } else {
+          console.log("User cancelled login or did not fully authorize.");
+        }
+      },
+      {
+        scope:
+          "pages_read_engagement,pages_manage_metadata,pages_show_list,ads_management,lead_retrieval,email",
+      }
+    );
+  };
+
+  useEffect(() => {
     const initializeFacebookSDK = () => {
       window.fbAsyncInit = function () {
         window.FB.init({
-          appId: "1042559036824480", // Replace with your actual App ID
+          appId: "1042559036824480",
           cookie: true,
           xfbml: true,
-          version: "v19.0", // Use the latest version available
+          version: "v19.0",
         });
 
-        // Trigger a custom event after SDK initialization
         window.dispatchEvent(new Event("fb-sdk-initialized"));
       };
 
-      // Load the SDK asynchronously
       (function (d, s, id) {
         var js,
           fjs = d.getElementsByTagName(s)[0];
@@ -70,33 +105,16 @@ const App = () => {
         js.src = "https://connect.facebook.net/en_US/sdk.js";
         fjs.parentNode.insertBefore(js, fjs);
       })(document, "script", "facebook-jssdk");
+
+      window.addEventListener("fb-sdk-initialized", loginWithFacebook);
+
+      return () => {
+        window.removeEventListener("fb-sdk-initialized", loginWithFacebook);
+      };
     };
 
     initializeFacebookSDK();
   }, []);
-
-  const loginWithFacebook = () => {
-    if (window.FB) {
-      window.FB.login(
-        function (response) {
-          // Handle the response
-          if (response.authResponse) {
-            console.log("User logged in successfully");
-            // You can fetch lead data after successful login using the access token
-            // in response.authResponse.accessToken
-          } else {
-            console.log("User cancelled login or did not fully authorize.");
-          }
-        },
-        {
-          scope:
-            "pages_read_engagement,pages_manage_metadata,pages_show_list,ads_management,lead_retrieval,email",
-        }
-      );
-    } else {
-      console.error("Facebook SDK not loaded yet");
-    }
-  };
 
   return (
     <div>
