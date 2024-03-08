@@ -105,7 +105,10 @@ const App = () => {
           console.log("User cancelled login or did not fully authorize.");
         }
       },
-      { scope: "email" }
+      {
+        scope:
+          "pages_read_engagement,pages_manage_metadata,pages_show_list,ads_management,lead_retrieval,email",
+      }
     ); // Specify additional permissions if needed
   };
 
