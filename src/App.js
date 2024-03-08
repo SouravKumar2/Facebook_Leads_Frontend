@@ -93,12 +93,27 @@ const App = () => {
   const loginWithFacebook = () => {
     if (window.FB) {
       window.FB.login(
-        function (response) {
+        async function (response) {
           // handle the response
           if (response.authResponse) {
             console.log("User logged in successfully");
-            // You can fetch lead data after successful login using the access token
-            // in response.authResponse.accessToken
+            try {
+              // Fetch lead data using the access token
+              const accessToken = response.authResponse.accessToken;
+              const leadResponse = await fetch(
+                `https://facebook-leads-backend.onrender.com/getLeadData?accessToken=${accessToken}`
+              );
+              if (!leadResponse.ok) {
+                throw new Error(
+                  `Failed to fetch lead data. Status: ${leadResponse.status}`
+                );
+              }
+              const leadData = await leadResponse.json();
+              console.log("Lead data:", leadData);
+              setLeadData(leadData);
+            } catch (error) {
+              console.error("Error fetching lead data:", error.message);
+            }
           } else {
             console.log("User cancelled login or did not fully authorize.");
           }
