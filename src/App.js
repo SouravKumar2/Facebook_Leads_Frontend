@@ -5,7 +5,6 @@ const LeadDataTable = ({ leadData }) => {
   return (
     <div>
       <h2>Lead Data</h2>
-
       {leadData && leadData.length > 0 ? (
         <table>
           <thead>
@@ -31,7 +30,6 @@ const LeadDataTable = ({ leadData }) => {
                 <td>{lead.leadgenId}</td>
                 <td>{lead.pageId}</td>
                 <td>{lead.formId}</td>
-                {/* <td>{lead.userData}</td> */}
                 {/* Add more cells as needed */}
               </tr>
             ))}
@@ -56,14 +54,12 @@ const App = () => {
         if (!response.ok) {
           throw new Error(`Failed to fetch data. Status: ${response.status}`);
         }
-
         const data = await response.json();
-        console.log("Received data:", data); // Add this line
+        console.log("Received data:", data);
         setLeadData(data);
       } catch (error) {
         console.error("Error fetching lead data:", error.message);
       }
-      // console.log(leadData.userData, "new Data");
     };
 
     fetchLeadData();
@@ -72,7 +68,7 @@ const App = () => {
   useEffect(() => {
     window.fbAsyncInit = function () {
       window.FB.init({
-        appId: "1042559036824480",
+        appId: "1042559036824480", // Replace with your actual App ID
         cookie: true,
         xfbml: true,
         version: "v19.0", // use the latest version available
@@ -95,21 +91,26 @@ const App = () => {
   }, []);
 
   const loginWithFacebook = () => {
-    window.FB.login(
-      function (response) {
-        // handle the response
-        if (response.authResponse) {
-          console.log("User logged in successfully");
-          // Fetch user data or perform other actions after successful login
-        } else {
-          console.log("User cancelled login or did not fully authorize.");
+    if (window.FB) {
+      window.FB.login(
+        function (response) {
+          // handle the response
+          if (response.authResponse) {
+            console.log("User logged in successfully");
+            // You can fetch lead data after successful login using the access token
+            // in response.authResponse.accessToken
+          } else {
+            console.log("User cancelled login or did not fully authorize.");
+          }
+        },
+        {
+          scope:
+            "pages_read_engagement,pages_manage_metadata,pages_show_list,ads_management,lead_retrieval,email",
         }
-      },
-      {
-        scope:
-          "pages_read_engagement,pages_manage_metadata,pages_show_list,ads_management,lead_retrieval,email",
-      }
-    ); // Specify additional permissions if needed
+      );
+    } else {
+      console.error("Facebook SDK not loaded yet");
+    }
   };
 
   return (
