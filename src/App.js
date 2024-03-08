@@ -46,26 +46,6 @@ const App = () => {
   const [leadData, setLeadData] = useState(null);
 
   useEffect(() => {
-    const fetchLeadData = async () => {
-      try {
-        const response = await fetch(
-          "https://facebook-leads-backend.onrender.com/getLeadData"
-        );
-        if (!response.ok) {
-          throw new Error(`Failed to fetch data. Status: ${response.status}`);
-        }
-        const data = await response.json();
-        console.log("Received data:", data);
-        setLeadData(data);
-      } catch (error) {
-        console.error("Error fetching lead data:", error.message);
-      }
-    };
-
-    fetchLeadData();
-  }, []);
-
-  useEffect(() => {
     // Initialize Facebook SDK asynchronously
     const initializeFacebookSDK = () => {
       window.fbAsyncInit = function () {
