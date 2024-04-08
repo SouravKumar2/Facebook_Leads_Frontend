@@ -10,11 +10,11 @@ const LeadDataTable = ({ leadData }) => {
           <thead>
             <tr>
               <th>Sl no.</th>
+              <th>Created At</th>
               <th>LeadGen ID</th>
               <th>Page ID</th>
-              {/* <th>Ad Group ID</th> */}
-              {/* <th>Ad ID</th> */}
-              {/* <th>Created At</th> */}
+              <th>Ad ID</th>
+              <th>Ad Group ID</th>
               {/* <th>Form ID</th> */}
               {/* <th>User Data</th> */}
               {/* Add more headers as needed */}
@@ -24,11 +24,11 @@ const LeadDataTable = ({ leadData }) => {
             {leadData.map((lead, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
+                <td>{lead.createdTime}</td>
                 <td>{lead.leadgenId}</td>
                 <td>{lead.pageId}</td>
-                {/* <td>{lead.adgroupId}</td> */}
-                {/* <td>{lead.adId}</td> */}
-                {/* <td>{lead.createdTime}</td> */}
+                <td>{lead.adId}</td>
+                <td>{lead.adgroupId}</td>
                 {/* <td>{lead.formId}</td> */}
                 {/* Add more cells as needed */}
               </tr>
