@@ -26,7 +26,7 @@ const LeadDataTable = ({ leadData }) => {
                 <td>{index + 1}</td>
                 {/* <td>{lead.adgroupId}</td> */}
                 {/* <td>{lead.adId}</td> */}
-                <td>{lead.createdTime}</td>
+                {/* <td>{lead.createdTime}</td> */}
                 <td>{lead.leadgenId}</td>
                 <td>{lead.pageId}</td>
                 <td>{lead.formId}</td>
