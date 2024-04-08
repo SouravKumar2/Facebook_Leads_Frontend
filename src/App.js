@@ -13,7 +13,7 @@ const LeadDataTable = ({ leadData }) => {
               <th>Ad Group ID</th>
               <th>Ad ID</th>
               <th>Created At</th>
-              <th>Leadgen ID</th>
+              <th>LeadGen ID</th>
               <th>Page ID</th>
               <th>Form ID</th>
               <th>User Data</th>
