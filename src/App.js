@@ -77,7 +77,7 @@ const App = () => {
         }
       },
       {
-        scope: "email",
+        scope: "pages_manage_ads, pages_read_engagement, pages_show_list, ads_management, leads_retrieval, pages_manage_metadata",
       }
     );
   };
