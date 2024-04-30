@@ -12,64 +12,10 @@
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>Facebook Leads App</title>
-    <script
-      async
-      defer
-      crossorigin="anonymous"
-      src="https://connect.facebook.net/en_US/sdk.js"
-    ></script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <!-- Add the Facebook SDK for JavaScript -->
-
-    <script
-      async
-      defer
-      crossorigin="anonymous"
-      src="https://connect.facebook.net/en_US/sdk.js"
-    >
-      // Add the Facebook SDK for Javascript
-      (function (d, s, id) {
-        var js,
-          fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "https://connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-      })(document, "script", "facebook-jssdk");
-
-      window.fbAsyncInit = function () {
-        // Initialize the SDK with your app and the Graph API version for your app
-        FB.init({
-          appId: "1069296774173255",
-          xfbml: true,
-          version: "v19.0",
-        });
-
-        // Function to handle login and retrieve user information
-        function handleLogin() {
-          FB.login(function (response) {
-            if (response.authResponse) {
-              console.log("Welcome! Fetching your information...");
-              FB.api("/me", { fields: "name, email" }, function (response) {
-                document.getElementById("profile").innerHTML =
-                  "Good to see you, " +
-                  response.name +
-                  ". I see your email address is " +
-                  response.email;
-              });
-            } else {
-              console.log("User cancelled login or did not fully authorize.");
-            }
-          });
-        }
-
-        // Trigger login function on page load
-        handleLogin();
-      };
-    </script>
   </body>
 </html>
