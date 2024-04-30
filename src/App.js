@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
+import FacebookLogin from 'react-facebook-login';
 
 const LeadDataTable = ({ leadData }) => {
   return (
@@ -13,11 +14,6 @@ const LeadDataTable = ({ leadData }) => {
               <th>Created At</th>
               <th>LeadGen ID</th>
               <th>Page ID</th>
-              {/* <th>Ad ID</th>
-              <th>Ad Group ID</th> */}
-              {/* <th>Form ID</th> */}
-              {/* <th>User Data</th> */}
-              {/* Add more headers as needed */}
             </tr>
           </thead>
           <tbody>
@@ -27,10 +23,6 @@ const LeadDataTable = ({ leadData }) => {
                 <td>{lead.createdTime}</td>
                 <td>{lead.leadgenId}</td>
                 <td>{lead.pageId}</td>
-                {/* <td>{lead.adId}</td>
-                <td>{lead.adgroupId}</td> */}
-                {/* <td>{lead.formId}</td> */}
-                {/* Add more cells as needed */}
               </tr>
             ))}
           </tbody>
@@ -65,60 +57,26 @@ const App = () => {
     fetchLeadData();
   }, []);
 
-  const loginWithFacebook = () => {
-    window.FB.login(
-      function (response) {
-        if (response.authResponse) {
-          console.log("User logged in successfully");
-          // Fetch lead data using response.authResponse.accessToken
-          // Make sure to handle errors and fetch data accordingly
-        } else {
-          console.log("User cancelled login or did not fully authorize.");
-        }
-      },
-      {
-        scope: "pages_manage_ads, pages_read_engagement, pages_show_list, ads_management, leads_retrieval, pages_manage_metadata",
-      }
-    );
+  const responseFacebook = (response) => {
+    if (response.accessToken) {
+      console.log("User logged in successfully");
+      // Fetch lead data using response.accessToken
+      // Make sure to handle errors and fetch data accordingly
+    } else {
+      console.log("User cancelled login or did not fully authorize.");
+    }
   };
-
-  useEffect(() => {
-    const initializeFacebookSDK = () => {
-      window.fbAsyncInit = function () {
-        window.FB.init({
-          appId: "1069296774173255",
-          cookie: true,
-          xfbml: true,
-          version: "v19.0",
-        });
-
-        window.dispatchEvent(new Event("fb-sdk-initialized"));
-      };
-
-      (function (d, s, id) {
-        var js,
-          fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "https://connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-      })(document, "script", "facebook-jssdk");
-
-      window.addEventListener("fb-sdk-initialized", loginWithFacebook);
-
-      return () => {
-        window.removeEventListener("fb-sdk-initialized", loginWithFacebook);
-      };
-    };
-
-    initializeFacebookSDK();
-  }, []);
 
   return (
     <div>
       <LeadDataTable leadData={leadData} />
-      <button onClick={loginWithFacebook}>Login with Facebook</button>
+      <FacebookLogin
+        appId="1069296774173255"
+        autoLoad={false}
+        fields="name,email,picture"
+        callback={responseFacebook}
+        cssClass="facebook-login-button"
+      />
     </div>
   );
 };
