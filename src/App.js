@@ -91,7 +91,7 @@ const App = () => {
           console.log("User cancelled login or did not fully authorize.");
         }
       },
-      { scope: "email" } // Specify the permissions you need
+      { scope: "public_profile,email" } // Specify the permissions you need
     );
   };
 
