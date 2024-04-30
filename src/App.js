@@ -91,7 +91,7 @@ const App = () => {
           console.log("User cancelled login or did not fully authorize.");
         }
       },
-      { scope: "pages_manage_ads" } // Specify the permissions you need
+      { scope: "pages_manage_ads, pages_read_engagement, pages_show_list, ads_management, leads_retrieval, pages_manage_metadata" } // Specify the permissions you need
     );
   };
 
