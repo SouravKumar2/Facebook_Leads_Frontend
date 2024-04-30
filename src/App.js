@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import FacebookLogin from 'react-facebook-login';
+// import FacebookLogin from 'react-facebook-login';
 
 const LeadDataTable = ({ leadData }) => {
   return (
@@ -57,26 +57,48 @@ const App = () => {
     fetchLeadData();
   }, []);
 
-  const responseFacebook = (response) => {
-    if (response.accessToken) {
-      console.log("User logged in successfully");
-      // Fetch lead data using response.accessToken
-      // Make sure to handle errors and fetch data accordingly
-    } else {
-      console.log("User cancelled login or did not fully authorize.");
-    }
+  useEffect(() => {
+    // Initialize Facebook SDK
+    window.fbAsyncInit = function () {
+      window.FB.init({
+        appId: "1069296774173255",
+        cookie: true,
+        xfbml: true,
+        version: "v19.0",
+      });
+    };
+
+    // Load the SDK asynchronously
+    (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    })(document, "script", "facebook-jssdk");
+  }, []);
+
+  const loginWithFacebook = () => {
+    window.FB.login(
+      function (response) {
+        if (response.authResponse) {
+          console.log("User logged in successfully");
+          // Handle the login response
+          // You can fetch additional user data using response.authResponse.accessToken
+        } else {
+          console.log("User cancelled login or did not fully authorize.");
+        }
+      },
+      { scope: "email" } // Specify the permissions you need
+    );
   };
 
   return (
     <div>
       <LeadDataTable leadData={leadData} />
-      <FacebookLogin
-        appId="1069296774173255"
-        autoLoad={false}
-        fields="name,email,picture"
-        callback={responseFacebook}
-        cssClass="facebook-login-button"
-      />
+      <button onClick={loginWithFacebook}>Login with Facebook</button>
     </div>
   );
 };
